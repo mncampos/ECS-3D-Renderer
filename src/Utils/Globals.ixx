@@ -23,6 +23,7 @@ export using ComponentType		 = uint32_t;
 * EVENT TYPES
 ***************************************************************************/
 export enum EventType {
-	MOVEMENT_EVENT = 1,
+	SDL_EVENT = 0,
+	MOVEMENT_EVENT,
 	ATTACK_EVENT
 };

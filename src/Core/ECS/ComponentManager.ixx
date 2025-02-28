@@ -70,6 +70,15 @@ namespace ECS {
 			}
 		}
 
+		std::vector<Entity> GetEntities() const {
+			std::vector<Entity> entities;
+			entities.reserve(entity_to_index_map.size());
+			for (const auto& pair : entity_to_index_map) {
+				entities.push_back(pair.first);
+			}
+			return entities;
+		}
+
 	private:
 		std::vector<T> component_vector;
 		std::unordered_map<Entity, size_t> entity_to_index_map;
@@ -106,7 +115,8 @@ namespace ECS {
 				return component_types[type_name];
 			}
 			else {
-				std::cerr << "[ComponentManager::GetComponentTypeId] WARNING ->  Component " << type_name << " was NOT registered." << std::endl;
+				std::cerr << "[ComponentManager::GetComponentTypeId] ERROR ->  Component " << type_name << " was NOT registered." << std::endl;
+				exit(1);
 			}
 
 		}
@@ -138,6 +148,13 @@ namespace ECS {
 			}
 		}
 
+		template<typename T>
+		std::vector<Entity> GetEntitiesWith() {
+			return GetComponentArray<T>()->GetEntities();
+		}
+
+
+
 
 	private:
 		std::unordered_map<const char*, ComponentType> component_types{};
@@ -154,7 +171,8 @@ namespace ECS {
 				return std::static_pointer_cast<ComponentArray<T>>(component_arrays[type_name]);
 			}
 			else {
-				std::cerr << "[ComponentManager::GetComponentArray] WARNING -> Component " << type_name << " was NOT registered." << std::endl;
+				std::cerr << "[ComponentManager::GetComponentArray] ERROR -> Component " << type_name << " was NOT registered." << std::endl;
+				exit(1);
 			}
 		}
 

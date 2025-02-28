@@ -19,11 +19,13 @@ namespace ECS {
 
 			if (systems.find(type_name) == systems.end())
 			{
-				systems.insert({ type_name, std::make_shared<T>()});
+				auto system = std::make_shared<T>();
+				systems.insert({ type_name, system });
 				return system;
 			}
 			else {
-				std::cerr << "[SystemManager::RegisterSystem] WARNING -> System " << type_name << " already registered." << std::endl;
+				std::cerr << "[SystemManager::RegisterSystem] ERROR -> System " << type_name << " already registered." << std::endl;
+				exit(1);
 			}
 		
 		}

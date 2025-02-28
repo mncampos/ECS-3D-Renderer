@@ -145,17 +145,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Components\ActorComponents.ixx" />
+    <ClCompile Include="src\Components\GeometryComponents.ixx" />
+    <ClCompile Include="src\Components\GraphicsComponents.ixx" />
+    <ClCompile Include="src\Components\WorldComponents.ixx" />
     <ClCompile Include="src\Core\ECS\ComponentManager.ixx" />
     <ClCompile Include="src\Core\ECS\Engine.ixx" />
     <ClCompile Include="src\Core\ECS\EntityManager.ixx" />
     <ClCompile Include="src\Core\ECS\EventManager.ixx" />
     <ClCompile Include="src\Core\ECS\SystemManager.ixx" />
+    <ClCompile Include="src\Events\InputEvents.ixx" />
+    <ClCompile Include="src\Events\MovementEvent.ixx" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\Game.ixx" />
+    <ClCompile Include="src\Game\GameContext.ixx" />
+    <ClCompile Include="src\Game\World.ixx" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Rendering\Window\Window.cpp" />
     <ClCompile Include="src\Rendering\Window\Window.ixx" />
+    <ClCompile Include="src\Systems\InputSystem.ixx" />
+    <ClCompile Include="src\Systems\MovementSystem.ixx" />
+    <ClCompile Include="src\Systems\RenderingSystem.ixx" />
     <ClCompile Include="src\Utils\Globals.ixx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Effects\blood.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Assets\Textures\dirt.bmp" />
+    <Image Include="Assets\Textures\grass.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="Assets\Textures\wall.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,6 +6,7 @@ import EventManager;
 import Globals;
 import std;
 
+
 namespace ECS {
 	export class Engine {
 	public:
@@ -88,6 +89,13 @@ namespace ECS {
 			system_manager->SetSystemSignature<T>(signature);
 		}
 
+		template<typename T>
+		std::vector<Entity> GetEntitiesWith() {
+			return component_manager->GetEntitiesWith<T>();
+		}
+
+
+
 		void Subscribe(EventType event_type, EventCallback callback)
 		{
 			event_manager->Subscribe(event_type, callback);
@@ -115,4 +123,6 @@ namespace ECS {
 		std::unique_ptr<SystemManager> system_manager;
 		std::unique_ptr<EventManager> event_manager;
 	};
+
+	export extern Engine engine;
 }

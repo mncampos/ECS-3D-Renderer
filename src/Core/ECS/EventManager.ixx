@@ -30,7 +30,7 @@ namespace ECS {
 		{
 			while (!event_queue.empty())
 			{
-				auto event = event_queue.front();
+				auto& event = event_queue.front();
 				EventType type = event->GetType();
 
 				if (event_listeners.find(type) != event_listeners.end())

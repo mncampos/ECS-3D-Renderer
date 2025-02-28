@@ -14,6 +14,7 @@ Window::Window(const std::string& title, int width, int height) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     // Create the SDL3 window
     window = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
@@ -37,11 +38,13 @@ Window::Window(const std::string& title, int width, int height) {
     }
 
 
-
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);       // Nearer fragments pass
+    glDepthMask(GL_TRUE);       // Enable depth writing
+    glClearDepth(1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
 
     // Load the BMP icon
     SDL_Surface* iconSurface = SDL_LoadBMP("assets/icons/gameIcon.bmp");
@@ -55,8 +58,7 @@ Window::Window(const std::string& title, int width, int height) {
         SDL_DestroySurface(iconSurface);
     }
 
-    // Enable vsync
-    SDL_GL_SetSwapInterval(1);
+
 
     // Set the clear color (default background color)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
