@@ -88,7 +88,7 @@ namespace  ECS {
             TerrainData data;
             data.heights.resize(width * height, 0.0f);
             data.tiles.resize(width * height);
-            int id = terrains.size();
+            int id = (int) terrains.size();
             terrains[id] = std::move(data);
             return id;
         }

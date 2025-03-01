@@ -17,6 +17,8 @@ import TransformComponent;
 import HeightmapComponent;
 import TerrainMeshComponent;
 import TileGridComponent;
+import PositionComponent;
+import CameraComponent;
 
 namespace ECS {
 
@@ -47,11 +49,13 @@ namespace ECS {
 			Engine::Get().RegisterComponent<Actor>();
 			Engine::Get().RegisterComponent<Mesh>();
 			Engine::Get().RegisterComponent<Player>();
+			Engine::Get().RegisterComponent<Position>();
 			Engine::Get().RegisterComponent<Renderable>();
 			Engine::Get().RegisterComponent<Transform>();
 			Engine::Get().RegisterComponent<Heightmap>();
 			Engine::Get().RegisterComponent<TerrainMesh>();
 			Engine::Get().RegisterComponent<TileGrid>();
+			Engine::Get().RegisterComponent<Camera>();
 
 		}
 
@@ -115,10 +119,10 @@ namespace ECS {
 		}
 
 		template<typename T>
-		std::shared_ptr<T> RegisterSystem()
+		std::shared_ptr<T> RegisterSystem(int priority = 0)
 		{
 			static_assert(std::is_base_of_v<System, T>, "T must derive from System");
-			auto system = system_manager->RegisterSystem<T>();
+			auto system = system_manager->RegisterSystem<T>(priority);
 			system->Init();
 			return system;
 		}
@@ -153,7 +157,11 @@ namespace ECS {
 
 		void UpdateSystems(float delta_time)
 		{
-			system_manager->UpdateSystems(delta_time);
+			for (auto&  system : system_manager->GetSystems())
+			{
+				system->Update(delta_time);
+				DispatchEvents();
+			}
 		}
 
 

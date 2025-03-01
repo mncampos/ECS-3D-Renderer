@@ -5,55 +5,15 @@ import <glm/glm.hpp>;
 import std;
 import Globals;
 
-export class CameraMoveEvent : public ECS::Event {
+export class CameraUpdateEvent : public ECS::Event {
 public:
-    CameraMoveEvent(const glm::vec3& direction) : direction(direction) {}
+    glm::mat4 view;
+    glm::mat4 projection;
+
+
+    CameraUpdateEvent(const glm::mat4& v, const glm::mat4& p) : view(v), projection(p) {}
 
     EventType GetType() const override {
-        return CAMERA_MOVE_EVENT;
+        return CAMERA_UPDATE_EVENT;
     }
-
-    glm::vec3 GetDirection() const {
-        return direction;
-    }
-
-private:
-    glm::vec3 direction; // Direction of movement
-};
-
-export class CameraRotateEvent : public ECS::Event {
-public:
-    CameraRotateEvent(float deltaX, float deltaY) : deltaX(deltaX), deltaY(deltaY) {}
-
-    EventType GetType() const override {
-        return CAMERA_ROTATE_EVENT;
-    }
-
-    float GetDeltaX() const {
-        return deltaX;
-    }
-
-    float GetDeltaY() const {
-        return deltaY;
-    }
-
-private:
-    float deltaX; // Horizontal mouse movement
-    float deltaY; // Vertical mouse movement
-};
-
-export class CameraZoomEvent : public ECS::Event {
-public:
-    CameraZoomEvent(float deltaZoom) : deltaZoom(deltaZoom) {}
-
-    EventType GetType() const override {
-        return CAMERA_ZOOM_EVENT;
-    }
-
-    float GetDeltaZoom() const {
-        return deltaZoom;
-    }
-
-private:
-    float deltaZoom; // Scroll wheel delta
 };

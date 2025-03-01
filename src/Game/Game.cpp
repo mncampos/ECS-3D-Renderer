@@ -14,6 +14,7 @@ Game::Game() : window("Drakensoul", 1280, 768), isRunning(true)
     ECS::Engine::Get().Init();
     RegisterSystems();
     ECS::World::Get().Init();
+    AddPlayer();
 
 }
 
@@ -62,6 +63,7 @@ void Game::ProcessInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        if(event.type == SDL_EVENT_KEY_DOWN)
         ECS::Engine::Get().EmitEvent(std::make_shared<InputEvent>(event));
     };
     
@@ -69,11 +71,15 @@ void Game::ProcessInput()
 
 void Game::Update(float dt)
 {
+
     window.Clear();
     ProcessInput();
 
     ECS::Engine::Get().DispatchEvents();
+
     ECS::Engine::Get().UpdateSystems(dt);
 
     window.SwapBuffers();
+
+
 }

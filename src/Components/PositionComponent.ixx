@@ -1,7 +1,7 @@
 export module PositionComponent;
 
 
-export struct PositionComponent {
-	int x, y;
-	float z;
+export struct Position {
+	int x, y = 1;
+	float z = 2;
 };

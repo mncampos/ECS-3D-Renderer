@@ -6,6 +6,7 @@ namespace ECS {
 	export class System {
 	public:
 		std::set<Entity> Entities;
+		unsigned int priority = 0;
 		virtual void Update(float dt) {}
 	};
 
@@ -13,14 +14,17 @@ namespace ECS {
 	public:
 
 		template<typename T>
-		std::shared_ptr<T> RegisterSystem()
+		std::shared_ptr<T> RegisterSystem(int priority = 0)
 		{
 			const char* type_name = typeid(T).name();
 
 			if (systems.find(type_name) == systems.end())
 			{
 				auto system = std::make_shared<T>();
+				system->priority = priority;
 				systems.insert({ type_name, system });
+				sorted_systems.push_back(system);
+				SortSystemsByPriority();
 				return system;
 			}
 			else {
@@ -83,10 +87,23 @@ namespace ECS {
 			}
 		}
 
+		std::vector<std::shared_ptr<System>>& GetSystems()
+		{
+			return sorted_systems;
+		}
+
 
 
 	private:
 		std::unordered_map<const char*, std::shared_ptr<System>> systems{};
+		std::vector<std::shared_ptr<System>> sorted_systems{};
 		std::unordered_map<const char*, Signature> signatures{};
+
+		void SortSystemsByPriority()
+		{
+			std::sort(sorted_systems.begin(), sorted_systems.end(), [](const std::shared_ptr<System>& a, const std::shared_ptr<System>& b) {
+				return a->priority < b->priority;
+				});
+		}
 	};
 }

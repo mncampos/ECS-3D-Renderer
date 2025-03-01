@@ -33,10 +33,12 @@ namespace ECS {
 				auto& event = event_queue.front();
 				EventType type = event->GetType();
 
-				if (event_listeners.find(type) != event_listeners.end())
+				auto it = event_listeners.find(type);
+				if (it != event_listeners.end())
 				{
-					for (auto& callback : event_listeners[type])
+					for (auto& callback : it->second)
 					{
+
 						callback(*event);
 					}
 				}

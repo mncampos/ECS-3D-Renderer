@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\ActorComponent.ixx" />
+    <ClCompile Include="src\Components\CameraComponent.ixx" />
     <ClCompile Include="src\Components\HeightmapComponent.ixx" />
     <ClCompile Include="src\Components\MeshComponent.ixx" />
     <ClCompile Include="src\Components\PlayerComponent.ixx" />
@@ -162,6 +163,7 @@
     <ClCompile Include="src\Events\CameraEvents.ixx" />
     <ClCompile Include="src\Events\InputEvents.ixx" />
     <ClCompile Include="src\Events\MovementEvent.ixx" />
+    <ClCompile Include="src\Events\PlayerMovementEvent.ixx" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\Game.ixx" />
     <ClCompile Include="src\Game\World.ixx" />
@@ -171,6 +173,7 @@
     <ClCompile Include="src\Rendering\Shader\ShaderManager.ixx" />
     <ClCompile Include="src\Rendering\Window\Window.cpp" />
     <ClCompile Include="src\Rendering\Window\Window.ixx" />
+    <ClCompile Include="src\Systems\CameraSystem.ixx" />
     <ClCompile Include="src\Systems\InputSystem.ixx" />
     <ClCompile Include="src\Systems\MovementSystem.ixx" />
     <ClCompile Include="src\Systems\RenderingSystem.ixx" />

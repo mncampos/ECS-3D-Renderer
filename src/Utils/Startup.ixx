@@ -15,6 +15,9 @@ import MeshComponent;
 import TransformComponent;
 import RenderableComponent;
 import TerrainRenderingSystem;
+import CameraSystem;
+import PlayerComponent;
+import PositionComponent;
 
 
 
@@ -22,19 +25,39 @@ export void RegisterSystems()
 {
 	using namespace ECS;
 
-	Engine::Get().RegisterSystem<TerrainRenderingSystem>();
-	Engine::Get().RegisterSystem<InputSystem>();
-	Engine::Get().RegisterSystem<MovementSystem>();
+    Engine::Get().RegisterSystem<InputSystem>(1);
+    Engine::Get().RegisterSystem<MovementSystem>(2);
+    Engine::Get().RegisterSystem<CameraSystem>(3);
+    Engine::Get().RegisterSystem<RenderingSystem>(4);
+	Engine::Get().RegisterSystem<TerrainRenderingSystem>(5);
+}
+
+export void AddPlayer()
+{
+    using namespace ECS;
+    GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\TerrainVertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\TerrainFragmentShader.glsl");
+
+    auto manModel = ModelManager::Get().GetModel(".\\Assets\\Models\\man.obj");
+    std::cout << "man.obj: vertex_count = " << manModel->vertex_count << ", index_count = " << manModel->index_count << std::endl;
+
+    Entity player = ECS::Engine::Get().createEntity();
+
+    ECS::Engine::Get().AddComponent(player, Player{});
+    ECS::Engine::Get().AddComponent(player, Position{10,10, 0});
+    ECS::Engine::Get().AddComponent(player, Mesh{ manModel });
+    ECS::Engine::Get().AddComponent(player, Renderable{ shader, 0, glm::vec3(1.0f, 0.0f, 0.0f) });
+
 }
 
 
 export void LoadModels()
 {
-	GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\VertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\FragmentShader.glsl");
+	GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\TerrainVertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\TerrainFragmentShader.glsl");
 	Entity cube = ECS::Engine::Get().createEntity();
 	ECS::Engine::Get().AddComponent(cube, Mesh{ ModelManager::Get().GetModel(".\\Assets\\Models\\cube_cube.obj") });
 	ECS::Engine::Get().AddComponent(cube, Transform{ glm::ivec3(1,0,0) });
 	ECS::Engine::Get().AddComponent(cube, Renderable{ shader, 0, glm::vec3(1.0f, 0.5f, 0.2f) });
+
 
 }
 
