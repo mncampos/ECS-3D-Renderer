@@ -7,15 +7,52 @@ import Globals;
 import std;
 
 
+// Components
+
+import ActorComponent;
+import MeshComponent;
+import PlayerComponent;
+import RenderableComponent;
+import TransformComponent;
+import HeightmapComponent;
+import TerrainMeshComponent;
+import TileGridComponent;
+
 namespace ECS {
+
+	export class System {
+	public:
+		std::set<Entity> Entities;
+		virtual void Update(float dt) {}
+	};
+
+
 	export class Engine {
 	public:
+		Engine(const Engine&) = delete;
+		Engine& operator=(const Engine&) = delete;
+
+		static Engine& Get() {
+			static Engine instance;
+			return instance;
+		}
+
 		void Init()
 		{
 			entity_manager    = std::make_unique<EntityManager>();
 			component_manager = std::make_unique<ComponentManager>();
 			system_manager    = std::make_unique<SystemManager>();
 			event_manager     = std::make_unique<EventManager>();
+
+			Engine::Get().RegisterComponent<Actor>();
+			Engine::Get().RegisterComponent<Mesh>();
+			Engine::Get().RegisterComponent<Player>();
+			Engine::Get().RegisterComponent<Renderable>();
+			Engine::Get().RegisterComponent<Transform>();
+			Engine::Get().RegisterComponent<Heightmap>();
+			Engine::Get().RegisterComponent<TerrainMesh>();
+			Engine::Get().RegisterComponent<TileGrid>();
+
 		}
 
 		Entity createEntity()
@@ -80,7 +117,10 @@ namespace ECS {
 		template<typename T>
 		std::shared_ptr<T> RegisterSystem()
 		{
-			return system_manager->RegisterSystem<T>();
+			static_assert(std::is_base_of_v<System, T>, "T must derive from System");
+			auto system = system_manager->RegisterSystem<T>();
+			system->Init();
+			return system;
 		}
 
 		template<typename T>
@@ -118,11 +158,11 @@ namespace ECS {
 
 
 	private:
+		Engine() = default;
+
 		std::unique_ptr<EntityManager> entity_manager;
 		std::unique_ptr<ComponentManager>  component_manager;
 		std::unique_ptr<SystemManager> system_manager;
 		std::unique_ptr<EventManager> event_manager;
 	};
-
-	export extern Engine engine;
 }

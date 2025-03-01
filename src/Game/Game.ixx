@@ -2,7 +2,7 @@ export module Game;
 import Window;
 import Globals;
 import std;
-import GraphicsComponents;
+
 
 export class Game
 {

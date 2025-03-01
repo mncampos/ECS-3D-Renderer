@@ -25,5 +25,8 @@ export using ComponentType		 = uint32_t;
 export enum EventType {
 	SDL_EVENT = 0,
 	MOVEMENT_EVENT,
-	ATTACK_EVENT
+	ATTACK_EVENT,
+	CAMERA_MOVE_EVENT,
+	CAMERA_ROTATE_EVENT,
+	CAMERA_ZOOM_EVENT
 };

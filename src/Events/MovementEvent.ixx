@@ -1,7 +1,6 @@
 export module MovementEvent;
 import EventManager;
 import Globals;
-import GeometryComponents;
 import <glm/glm.hpp>;
 
 export class MovementEvent : public ECS::Event

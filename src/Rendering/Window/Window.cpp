@@ -1,5 +1,6 @@
 module;
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_mouse.h>
 #include <GL/glew.h>
 module Window;
 
@@ -36,7 +37,8 @@ Window::Window(const std::string& title, int width, int height) {
         std::cerr << "GLEW initialization failed" << std::endl;
         exit(1);
     }
-
+    SDL_SetWindowMouseGrab(window, true);
+    SDL_SetWindowRelativeMouseMode(window, true);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);       // Nearer fragments pass
@@ -44,6 +46,9 @@ Window::Window(const std::string& title, int width, int height) {
     glClearDepth(1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+
 
 
     // Load the BMP icon

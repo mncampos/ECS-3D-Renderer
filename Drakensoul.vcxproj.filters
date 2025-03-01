@@ -48,18 +48,6 @@
     <ClCompile Include="src\Core\ECS\EventManager.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Components\ActorComponents.ixx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\GraphicsComponents.ixx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\WorldComponents.ixx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Components\GeometryComponents.ixx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Systems\RenderingSystem.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,7 +66,49 @@
     <ClCompile Include="src\Game\World.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\GameContext.ixx">
+    <ClCompile Include="src\Components\PlayerComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\RenderableComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\TransformComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ActorComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\MeshComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\TileGridComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Startup.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Model\Model.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Model\ModelManager.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Shader\ShaderManager.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Events\CameraEvents.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\TerrainMeshComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\HeightmapComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\PositionComponent.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Systems\TerrainRenderingSystem.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,5 +125,12 @@
     <Image Include="Assets\Textures\dirt.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Assets\Textures\grass_tile.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Rendering\Shader\Shaders\VertexShader.glsl" />
+    <None Include="src\Rendering\Shader\Shaders\FragmentShader.glsl" />
   </ItemGroup>
 </Project>

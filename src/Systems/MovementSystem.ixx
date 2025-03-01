@@ -1,13 +1,12 @@
 export module MovementSystem;
 import SystemManager;
 import MovementEvent;
-import GeometryComponents;
 import <glm/glm.hpp>;
 import Globals;
 import std;
+import ActorComponent;
 import Engine;
-import WorldComponents;
-import GameContext;
+import TransformComponent;
 
 namespace ECS {
 	export class MovementSystem : public System
@@ -16,7 +15,12 @@ namespace ECS {
 
 		void Init()
 		{
-			engine.Subscribe(MOVEMENT_EVENT, [this](const Event& event) {
+			Signature signature;
+			signature.set(Engine::Get().GetComponentType<Actor>());
+			signature.set(Engine::Get().GetComponentType<Transform>());
+			Engine::Get().SetSystemSignature<MovementSystem>(signature);
+
+			Engine::Get().Subscribe(MOVEMENT_EVENT, [this](const Event& event) {
 
 				});
 
