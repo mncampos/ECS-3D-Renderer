@@ -60,6 +60,13 @@ namespace ECS {
 				glUniformMatrix4fv(glGetUniformLocation(renderable.shader_program, "projection"), 1, GL_FALSE, &projection[0][0]);
 				glUniform3fv(glGetUniformLocation(renderable.shader_program, "color"), 1, &renderable.color[0]);
 
+				            glm::vec3 lightDir = glm::normalize(glm::vec3(-0.5f, -1.0f, -0.5f));
+            glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f); 
+            float ambientStrength = 0.3f; 
+            glUniform3fv(glGetUniformLocation(renderable.shader_program, "lightDir"), 1, &lightDir[0]);
+            glUniform3fv(glGetUniformLocation(renderable.shader_program, "lightColor"), 1, &lightColor[0]);
+            glUniform1f(glGetUniformLocation(renderable.shader_program, "ambientStrength"), ambientStrength);
+
 
 				glBindVertexArray(mesh.VAO);
 				glDrawElements(GL_TRIANGLES, mesh.index_count, GL_UNSIGNED_INT, 0);

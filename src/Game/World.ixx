@@ -38,18 +38,18 @@ namespace  ECS {
         float simpleNoise(int x, int y, int seed = 42) {
             int n = x + y * 57 + seed;
             n = (n << 13) ^ n;
-            return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f) * 0.5f; // Range: [-0.5, 0.5]
+            return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f) * 0.5f; 
         }
 
         float getHeight(int x, int y, float scale = 0.1f, float amplitude = 2.0f) {
-            return simpleNoise(x, y) * amplitude * scale; // Small elevations (e.g., -1 to 1 units)
+            return simpleNoise(x, y) * amplitude * scale; 
         }
 
 		void Init()
 		{
 			constexpr size_t GRID_SIZE = 100;
 
-			GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\VertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\FragmentShader.glsl");
+			GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\TerrainVertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\TerrainFragmentShader.glsl");
 
             Entity terrain = Engine::Get().createEntity();
 
@@ -59,7 +59,7 @@ namespace  ECS {
 
             for (int y = 0; y < GRID_SIZE; ++y) {
                 for (int x = 0; x < GRID_SIZE; ++x) {
-                    terrainData.heights[y * GRID_SIZE + x] = getHeight(x, y, 0.4f, 2.0f); // Small hills
+                    terrainData.heights[y * GRID_SIZE + x] = getHeight(x, y, 0.1f, 2.0f); 
                 }
             }
 
@@ -106,20 +106,33 @@ namespace  ECS {
         {
             int vertexWidth = width + 1;
             int vertexHeight = height + 1;
-            data.vertices.resize(vertexWidth * vertexHeight * 5);
+            data.vertices.resize(vertexWidth * vertexHeight * 8);
 
             for (int y = 0; y < vertexHeight; ++y) {
                 for (int x = 0; x < vertexWidth; ++x) {
-                    int idx = (y * vertexWidth + x) * 5;
-                    data.vertices[idx] = static_cast<float>(x);
-                    data.vertices[idx + 1] = data.heights[std::min(y, height - 1) * width + std::min(x, width - 1)];
-                    data.vertices[idx + 2] = static_cast<float>(y);
-                    data.vertices[idx + 3] = static_cast<float>(x) / width;
-                    data.vertices[idx + 4] = static_cast<float>(y) / height;
+                    int idx = (y * vertexWidth + x) * 8;
+                    int clampedX = std::min(x, width - 1);
+                    int clampedY = std::min(y, height - 1);
+                    float h = data.heights[clampedY * width + clampedX];
+                    data.vertices[idx] = static_cast<float>(x);     
+                    data.vertices[idx + 1] = h;                     
+                    data.vertices[idx + 2] = static_cast<float>(y); 
+
+                    // Normal calculation with boundary checks
+                    float hL = (x > 0) ? data.heights[clampedY * width + std::max(0, x - 1)] : h;
+                    float hR = (x < width) ? data.heights[clampedY * width + std::min(width - 1, x + 1)] : h;
+                    float hU = (y > 0) ? data.heights[std::max(0, y - 1) * width + clampedX] : h;
+                    float hD = (y < height) ? data.heights[std::min(height - 1, y + 1) * width + clampedX] : h;
+                    glm::vec3 normal = glm::normalize(glm::vec3(hL - hR, 2.0f, hU - hD)); 
+                    data.vertices[idx + 3] = normal.x; 
+                    data.vertices[idx + 4] = normal.y; 
+                    data.vertices[idx + 5] = normal.z; 
+
+                    data.vertices[idx + 6] = static_cast<float>(x) / width;  
+                    data.vertices[idx + 7] = static_cast<float>(y) / height; 
                 }
             }
 
-            // Generate indices (static)
             int tileCount = width * height;
             data.indices.resize(tileCount * 6);
             int index = 0;
@@ -139,7 +152,6 @@ namespace  ECS {
                 }
             }
 
-            // Setup OpenGL buffers (static)
             glGenVertexArrays(1, &mesh.VAO);
             glBindVertexArray(mesh.VAO);
             glGenBuffers(1, &mesh.VBO);
@@ -149,10 +161,12 @@ namespace  ECS {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indices.size() * sizeof(unsigned int), data.indices.data(), GL_STATIC_DRAW);
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
             glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+            glEnableVertexAttribArray(2);
 
             glBindVertexArray(0);
             mesh.vertex_count = vertexWidth * vertexHeight;

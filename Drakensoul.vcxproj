@@ -192,8 +192,8 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Rendering\Shader\Shaders\FragmentShader.glsl" />
-    <None Include="src\Rendering\Shader\Shaders\VertexShader.glsl" />
+    <None Include="src\Rendering\Shader\Shaders\TerrainFragmentShader.glsl" />
+    <None Include="src\Rendering\Shader\Shaders\TerrainVertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
