@@ -176,6 +176,7 @@
     <ClCompile Include="src\Systems\CameraSystem.ixx" />
     <ClCompile Include="src\Systems\InputSystem.ixx" />
     <ClCompile Include="src\Systems\MovementSystem.ixx" />
+    <ClCompile Include="src\Systems\PlayerMovementSystem.ixx" />
     <ClCompile Include="src\Systems\RenderingSystem.ixx" />
     <ClCompile Include="src\Systems\TerrainRenderingSystem.ixx" />
     <ClCompile Include="src\Utils\Globals.ixx" />

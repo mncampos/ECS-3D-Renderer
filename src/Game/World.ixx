@@ -10,7 +10,6 @@ import ShaderManager;
 import ModelManager;
 import MeshComponent;
 import RenderableComponent;
-import Startup;
 import HeightmapComponent;
 import TerrainMeshComponent;
 import TileGridComponent;
@@ -52,6 +51,7 @@ namespace  ECS {
 			GLuint shader = ShaderManager::Get().GetProgram("src\\Rendering\\Shader\\Shaders\\TerrainVertexShader.glsl", "src\\Rendering\\Shader\\Shaders\\TerrainFragmentShader.glsl");
 
             Entity terrain = Engine::Get().createEntity();
+            terrain_entity = terrain;
 
             // Register static terrain data
             int terrainId = World::Get().RegisterTerrain(GRID_SIZE, GRID_SIZE);
@@ -96,10 +96,121 @@ namespace  ECS {
          TerrainData& GetTerrain(int id)  {
             return terrains.at(id);
         }
+
+         bool IsOccupied(int x, int y) const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return false;
+
+             const TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             const Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+
+             return tile.occupant != static_cast<Entity>(-1);
+         }
+
+         bool IsWalkable(int  x, int y)  const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return false;
+
+             const TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             const Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+
+             return tile.isWalkable;
+         }
+
+         bool IsEnterable(int x, int  y)  const
+         {
+             return IsWalkable(x, y) && !IsOccupied(x, y);
+         }
+
+         void SetOccupant(int x, int y, Entity occupant) const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return;
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+             tile.occupant = occupant;
+         }
+
+         void RemoveOccupant(int x, int y) const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return;
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+             tile.occupant = static_cast<Entity>(-1);
+         }
+
+         Entity GetOccupant(int x, int y) const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return static_cast<Entity>(-1);
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+             return tile.occupant;
+         }
+
+         void MoveOccupant(int x, int y, glm::ivec3 direction) const
+         {
+             Entity occupant = GetOccupant(x, y);
+             int dirX = x + direction.x;
+             int dirY = y + direction.y;
+
+             if (IsEnterable(dirX, dirY) && occupant != static_cast<Entity>(-1))
+             {
+                 SetOccupant(dirX, dirY, occupant);
+                 RemoveOccupant(x, y);
+             }
+         }
+
+         void AddItemToTile(int x, int y, Entity item)
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return;
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+
+             if (tile.item_count < 6)
+             {
+                 tile.items[tile.item_count++] = item;
+             }
+         }
+
+         void RemoveItemFromTile(int x, int y, Entity item)
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 return;
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+
+             for (int i = 0; i < tile.item_count; ++i)
+             {
+                 if (tile.items[i] == item)
+                 {
+                     tile.items[i] = tile.items[--tile.item_count];
+                     break;
+                 }
+             }
+         }
+
 		
 	private:
 		World() = default;
 
+        Entity terrain_entity;
 		std::unordered_map<int, TerrainData> terrains;
 
         void generateTerrainMesh(TerrainMesh & mesh, TerrainData & data, int width, int height)

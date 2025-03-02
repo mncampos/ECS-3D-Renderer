@@ -18,7 +18,8 @@ import TerrainRenderingSystem;
 import CameraSystem;
 import PlayerComponent;
 import PositionComponent;
-
+import PlayerMovementSystem;
+import World;
 
 
 export void RegisterSystems()
@@ -26,10 +27,11 @@ export void RegisterSystems()
 	using namespace ECS;
 
     Engine::Get().RegisterSystem<InputSystem>(1);
-    Engine::Get().RegisterSystem<MovementSystem>(2);
-    Engine::Get().RegisterSystem<CameraSystem>(3);
-    Engine::Get().RegisterSystem<RenderingSystem>(4);
-	Engine::Get().RegisterSystem<TerrainRenderingSystem>(5);
+    Engine::Get().RegisterSystem<PlayerMovementSystem>(2);
+    Engine::Get().RegisterSystem<MovementSystem>(3);
+    Engine::Get().RegisterSystem<CameraSystem>(4);
+    Engine::Get().RegisterSystem<RenderingSystem>(5);
+	Engine::Get().RegisterSystem<TerrainRenderingSystem>(6);
 }
 
 export void AddPlayer()
@@ -46,6 +48,9 @@ export void AddPlayer()
     ECS::Engine::Get().AddComponent(player, Position{10,10, 0});
     ECS::Engine::Get().AddComponent(player, Mesh{ manModel });
     ECS::Engine::Get().AddComponent(player, Renderable{ shader, 0, glm::vec3(1.0f, 0.0f, 0.0f) });
+
+    World::Get().SetOccupant(10, 10, player);
+    World::Get().SetOccupant(11, 10, 123);
 
 }
 

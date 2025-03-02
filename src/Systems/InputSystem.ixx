@@ -21,7 +21,6 @@ namespace ECS {
             Engine::Get().SetSystemSignature<InputSystem>(signature);
 
             Engine::Get().Subscribe(SDL_EVENT, [this](const Event& event) {
-                std::cout << "InputSystem -> Received SDL_EVENT" << std::endl;
                 const SDL_Event input_event = static_cast<const InputEvent&>(event).GetSDLEvent();
                 HandleInput(input_event);
                 });
@@ -62,13 +61,8 @@ namespace ECS {
                 return;
             }
 
-            auto& comp = Engine::Get().GetComponent<Position>(*Entities.begin());
-            comp.x += direction.x;
-            comp.y += direction.y;
-            comp.z += direction.z;
-            PlayerMovementEvent move(direction);
-
-            Engine::Get().EmitEvent(std::make_shared<PlayerMovementEvent>(move));
+            PlayerStartMovementEvent move(direction);
+            Engine::Get().EmitEvent(std::make_shared<PlayerStartMovementEvent>(move));
         }
 
 

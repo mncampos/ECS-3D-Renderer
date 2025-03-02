@@ -22,7 +22,7 @@ namespace ECS {
 			Engine::Get().SetSystemSignature<CameraSystem>(signature);
 
 			Entity camera = Engine::Get().createEntity();
-			Camera cam;
+			Camera cam{};
 			cam.position = glm::vec3(0, 160, 160); 
 			cam.projection = glm::perspective(
 				glm::radians(45.0f),        
@@ -34,8 +34,7 @@ namespace ECS {
 
 			camera_entity = camera;
 
-			Engine::Get().Subscribe(PLAYER_MOVEMENT_EVENT, [this](const Event& event) {
-				std::cout << "CameraSystem -> Received PLAYER_MOVEMENT_EVENT" << std::endl;
+			Engine::Get().Subscribe(PLAYER_FINISHED_MOVEMENT_EVENT, [this](const Event& event) {
 				shouldUpdate = true;
 				});
 

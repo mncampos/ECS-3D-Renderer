@@ -3,7 +3,7 @@ module;
 export module TileGridComponent;
 import Globals;
 
-static constexpr int MAX_ITEMS_PER_TILE = 4;
+static constexpr int MAX_ITEMS_PER_TILE = 6;
 
 export enum TileType {
 	GRASS

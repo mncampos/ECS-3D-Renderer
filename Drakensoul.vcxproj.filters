@@ -120,6 +120,9 @@
     <ClCompile Include="src\Events\PlayerMovementEvent.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Systems\PlayerMovementSystem.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Textures\wall.bmp">

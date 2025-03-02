@@ -3,14 +3,14 @@ import EventManager;
 import Globals;
 import <glm/glm.hpp>;
 
-export class PlayerMovementEvent : public ECS::Event
+export class PlayerStartMovementEvent : public ECS::Event
 {
 public:
-	PlayerMovementEvent(glm::ivec3 direction) : direction(direction) {}
+	PlayerStartMovementEvent(glm::ivec3 direction) : direction(direction) {}
 
 	EventType GetType() const override
 	{
-		return PLAYER_MOVEMENT_EVENT;
+		return PLAYER_START_MOVEMENT_EVENT;
 	}
 
 	glm::ivec3 GetDirection() const
@@ -21,3 +21,16 @@ public:
 private:
 	glm::ivec3 direction;
 };
+
+export class PlayerFinishedMovementEvent : public ECS::Event
+{
+public:
+	PlayerFinishedMovementEvent() {}
+
+	EventType GetType() const override
+	{
+		return PLAYER_FINISHED_MOVEMENT_EVENT;
+	}
+
+};
+

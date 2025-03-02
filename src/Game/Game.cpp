@@ -16,18 +16,19 @@ Game::Game() : window("Drakensoul", 1280, 768), isRunning(true)
     ECS::World::Get().Init();
     AddPlayer();
 
+
+
+   
+
 }
 
 void Game::Run()
 {
 
         using clock = std::chrono::high_resolution_clock;
-        constexpr std::chrono::duration<float> timestep(0.016f); // 16ms
+        constexpr std::chrono::duration<float> timestep(0.016f); 
         std::chrono::duration<float> lag(0.0f);
         auto time_start = clock::now();
-
-        int frame_count = 0;
-        float fps_timer = 0.0f;
 
         while (isRunning)
         {
@@ -37,19 +38,10 @@ void Game::Run()
 
             lag += delta_time;
 
-            // FPS counter update
-            frame_count++;
-            fps_timer += delta_time.count();
-            if (fps_timer >= 1.0f) {  // Every second, print FPS
-                std::cout << "FPS: " << frame_count << " | Frame Time: "
-                    << (1000.0f / frame_count) << " ms" << std::endl;
-                frame_count = 0;
-                fps_timer = 0.0f;
-            }
 
             while (lag >= timestep) {
                 lag -= timestep;
-                Update(timestep.count());  // Pass fixed timestep as float
+                Update(timestep.count());  
             }
 
         }
@@ -63,8 +55,9 @@ void Game::ProcessInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        if(event.type == SDL_EVENT_KEY_DOWN)
-        ECS::Engine::Get().EmitEvent(std::make_shared<InputEvent>(event));
+        if (event.type == SDL_EVENT_KEY_DOWN) {
+            ECS::Engine::Get().EmitEvent(std::make_shared<InputEvent>(event));
+        }
     };
     
 }
