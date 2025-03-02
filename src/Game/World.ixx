@@ -126,6 +126,17 @@ namespace  ECS {
              return IsWalkable(x, y) && !IsOccupied(x, y);
          }
 
+         Tile& GetTileAt(int x, int y) const
+         {
+             const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);
+             if (x < 0 || x >= tile_grid.width || y < 0 || y >= tile_grid.height)
+                 throw std::out_of_range("Tile coordinates are out of bounds");
+
+             TerrainData& terrain_data = World::Get().GetTerrain(tile_grid.tile_data_id);
+             Tile& tile = terrain_data.tiles[y * tile_grid.width + x];
+             return tile;
+         }
+
          void SetOccupant(int x, int y, Entity occupant) const
          {
              const TileGrid& tile_grid = Engine::Get().GetComponent<TileGrid>(terrain_entity);

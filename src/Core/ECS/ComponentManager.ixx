@@ -62,6 +62,17 @@ namespace ECS {
 			}
 		}
 
+		bool Has(Entity entity)
+		{
+			if (entity_to_index_map.find(entity) != entity_to_index_map.end())
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+
 		void EntityDestroyed(Entity entity) override
 		{
 			if (entity_to_index_map.find(entity) != entity_to_index_map.end())
@@ -124,6 +135,7 @@ namespace ECS {
 		template<typename T>
 		void AddComponent(Entity entity, T component)
 		{
+			const char* type_name = typeid(T).name();
 			GetComponentArray<T>()->AddComponentToEntity(entity, component);
 		}
 
@@ -146,6 +158,12 @@ namespace ECS {
 				auto const& component = key_pair.second;
 				component->EntityDestroyed(entity);
 			}
+		}
+
+		template<typename T>
+		bool HasComponent(Entity entity)
+		{
+			return GetComponentArray<T>()->Has(entity);
 		}
 
 		template<typename T>

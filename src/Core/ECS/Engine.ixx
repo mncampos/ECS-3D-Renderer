@@ -19,6 +19,9 @@ import TerrainMeshComponent;
 import TileGridComponent;
 import PositionComponent;
 import CameraComponent;
+import ManaComponent;
+import HealthComponent;
+import AttributesComponent;
 
 namespace ECS {
 
@@ -56,6 +59,9 @@ namespace ECS {
 			Engine::Get().RegisterComponent<TerrainMesh>();
 			Engine::Get().RegisterComponent<TileGrid>();
 			Engine::Get().RegisterComponent<Camera>();
+			Engine::Get().RegisterComponent<Mana>();
+			Engine::Get().RegisterComponent<Health>();
+			Engine::Get().RegisterComponent<Attributes>();
 
 		}
 
@@ -80,12 +86,17 @@ namespace ECS {
 		template<typename T>
 		void AddComponent(Entity entity, T component)
 		{
-			component_manager->AddComponent(entity, component);
 
-			auto signature = entity_manager->GetSignature(entity);
-			signature.set(component_manager->GetComponentTypeId<T>(), true);
-			entity_manager->SetSignature(entity, signature);
-		    system_manager->EntitySignatureChanged(entity, signature);
+			if (!component_manager->HasComponent<T>(entity)) {
+				component_manager->AddComponent(entity, component);
+
+				auto signature = entity_manager->GetSignature(entity);
+				signature.set(component_manager->GetComponentTypeId<T>(), true);
+
+
+				entity_manager->SetSignature(entity, signature);
+				system_manager->EntitySignatureChanged(entity, signature);
+			}
 		}
 
 		template<typename T>

@@ -38,6 +38,9 @@ namespace ECS {
 				pos_component.y += pos.y;
 				pos_component.z += pos.z;
 
+				pos_component.facing.x = -pos.x;
+				pos_component.facing.y = -pos.y;
+
 				Engine::Get().EmitEvent(std::make_shared<PlayerFinishedMovementEvent>());
 			
 			}

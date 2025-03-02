@@ -18,21 +18,8 @@ namespace ECS {
 		{
 			Signature signature;
 			signature.set(Engine::Get().GetComponentType<Player>());
-			signature.set(Engine::Get().GetComponentType<Position>());
 			Engine::Get().SetSystemSignature<CameraSystem>(signature);
 
-			Entity camera = Engine::Get().createEntity();
-			Camera cam{};
-			cam.position = glm::vec3(0, 160, 160); 
-			cam.projection = glm::perspective(
-				glm::radians(45.0f),        
-				1280.0f / 768.0f,          
-				0.1f,                      
-				1000.0f                     
-			);
-			Engine::Get().AddComponent(camera, cam);
-
-			camera_entity = camera;
 
 			Engine::Get().Subscribe(PLAYER_FINISHED_MOVEMENT_EVENT, [this](const Event& event) {
 				shouldUpdate = true;
@@ -46,7 +33,7 @@ namespace ECS {
 				return;
 			}
 
-			auto& camera = Engine::Get().GetComponent<Camera>(camera_entity);
+			auto& camera = Engine::Get().GetComponent<Camera>(*Entities.begin());
 
 
 
@@ -65,13 +52,12 @@ namespace ECS {
 			}
 			shouldUpdate = false;
 			
-			CameraUpdateEvent event(camera.view, camera.projection);
+			CameraUpdateEvent event(camera.view, camera.projection, camera.position);
 			Engine::Get().EmitEvent(std::make_shared<CameraUpdateEvent>(event));
 		}
 
 
 	private:
-		Entity camera_entity;
 		bool shouldUpdate = true;
 	};
 }

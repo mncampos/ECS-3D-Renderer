@@ -1,15 +1,17 @@
 export module Model;
 import std;
 import <GL/glew.h>;
+import <glm/glm.hpp>;
 
 export struct Model {
 	GLuint VAO, VBO, EBO;
 	unsigned int vertex_count;
 	unsigned int index_count;
+    glm::vec3 diffuseColor;
 
-    static Model Create(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {})
+    static Model Create(const std::vector<float>& vertices, const std::vector<unsigned int>& indices = {}, const glm::vec3& diffuseColor = glm::vec3(1.0f))
     {
-        Model model{ 0, 0, 0, 0, 0 };
+        Model model{ 0, 0, 0, 0, 0, diffuseColor };
 
         glGenVertexArrays(1, &model.VAO);
         glBindVertexArray(model.VAO);

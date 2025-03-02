@@ -146,8 +146,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Components\ActorComponent.ixx" />
+    <ClCompile Include="src\Components\AttributesComponent.ixx" />
     <ClCompile Include="src\Components\CameraComponent.ixx" />
+    <ClCompile Include="src\Components\HealthComponent.ixx" />
     <ClCompile Include="src\Components\HeightmapComponent.ixx" />
+    <ClCompile Include="src\Components\ManaComponent.ixx" />
     <ClCompile Include="src\Components\MeshComponent.ixx" />
     <ClCompile Include="src\Components\PlayerComponent.ixx" />
     <ClCompile Include="src\Components\PositionComponent.ixx" />
@@ -160,6 +163,7 @@
     <ClCompile Include="src\Core\ECS\EntityManager.ixx" />
     <ClCompile Include="src\Core\ECS\EventManager.ixx" />
     <ClCompile Include="src\Core\ECS\SystemManager.ixx" />
+    <ClCompile Include="src\Events\AttackEvent.ixx" />
     <ClCompile Include="src\Events\CameraEvents.ixx" />
     <ClCompile Include="src\Events\InputEvents.ixx" />
     <ClCompile Include="src\Events\MovementEvent.ixx" />
@@ -174,6 +178,7 @@
     <ClCompile Include="src\Rendering\Window\Window.cpp" />
     <ClCompile Include="src\Rendering\Window\Window.ixx" />
     <ClCompile Include="src\Systems\CameraSystem.ixx" />
+    <ClCompile Include="src\Systems\CombatSystem.ixx" />
     <ClCompile Include="src\Systems\InputSystem.ixx" />
     <ClCompile Include="src\Systems\MovementSystem.ixx" />
     <ClCompile Include="src\Systems\PlayerMovementSystem.ixx" />

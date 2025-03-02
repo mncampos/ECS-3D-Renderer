@@ -69,6 +69,7 @@ namespace ECS {
 				if ((entity_signature & system_signature) == system_signature)
 				{
 					system->Entities.insert(entity);
+
 				}
 				else {
 					if (system->Entities.contains(entity))
@@ -91,6 +92,7 @@ namespace ECS {
 		{
 			return sorted_systems;
 		}
+
 
 
 

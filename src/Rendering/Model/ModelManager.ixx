@@ -103,6 +103,15 @@ private:
 			}
 		}
 
-		return std::make_shared<Model>(Model::Create(vertices, indices));
+		glm::vec3 diffuseColor(1.0f); // Default white color
+		if (mesh->mMaterialIndex >= 0) {
+			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+			aiColor3D aiDiffuseColor(0.0f, 0.0f, 0.0f);
+			material->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuseColor);
+			diffuseColor = glm::vec3(aiDiffuseColor.r, aiDiffuseColor.g, aiDiffuseColor.b);
+		}
+
+		std::cout << "Diffuse Color: (" << diffuseColor.r << ", " << diffuseColor.g << ", " << diffuseColor.b << ")\n";
+		return std::make_shared<Model>(Model::Create(vertices, indices, diffuseColor));
 	}
 };

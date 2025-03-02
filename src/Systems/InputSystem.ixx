@@ -10,7 +10,9 @@ import InputEvents;
 import PlayerComponent;
 import PlayerMovementEvent;
 import CameraEvents;
+import World;
 import PositionComponent;
+import AttackEvent;
 
 namespace ECS {
     export class InputSystem : public System {
@@ -36,8 +38,23 @@ namespace ECS {
                 if (sdl_event.key.key == SDLK_W || SDLK_S || SDLK_A || SDLK_D) {
                     HandleMovement(sdl_event.key.key);
                 }
+
+                if (sdl_event.key.key == SDLK_F) {
+                    HandleAttack();
+                }
                 
             }
+        }
+
+        void HandleAttack()
+        {
+            auto& position = Engine::Get().GetComponent<Position>(*Entities.begin());
+            auto& tile = World::Get().GetTileAt(position.x - position.facing.x, position.y - position.facing.y);
+
+            std::cout << "Tile  at  " << position.x + position.facing.x << " and " << position.y + position.facing.y << std::endl;
+
+            Engine::Get().EmitEvent(std::make_shared<AttackEvent>(*Entities.begin(), tile));
+
         }
 
         void HandleMovement(SDL_Keycode key)
